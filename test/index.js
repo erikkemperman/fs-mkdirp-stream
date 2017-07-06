@@ -146,6 +146,28 @@ describe('mkdirpStream', function() {
     ], assert);
   });
 
+  it('can pass falsy as the 2st argument to the resolver callback to skip', function(done) {
+
+    var mkdirSpy = expect.spyOn(fs, 'mkdir');
+
+    function resolver(chunk, cb) {
+      expect(chunk).toEqual('test');
+      cb(null, null);
+    }
+
+    function assert(err) {
+      expect(err).toNotExist();
+      expect(mkdirSpy.calls.length).toEqual(0);
+      done();
+    }
+
+    pipe([
+      from(['test']),
+      mkdirpStream(resolver),
+      concat(),
+    ], assert);
+  });
+
   it('works with objectMode', function(done) {
 
     function resolver(chunk, cb) {

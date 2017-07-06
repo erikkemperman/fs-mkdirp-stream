@@ -27,6 +27,10 @@ function define(options) {
         if (dirpathErr) {
           return callback(dirpathErr);
         }
+        if (!dirpath) {
+          // No dirpath from resolver, skip this directory
+          return callback(null, chunk);
+        }
 
         mkdirp(dirpath, mode, onMkdirp);
       }
